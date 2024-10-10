@@ -6,7 +6,7 @@
 #    By: lagea <lagea@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/10 17:46:27 by lagea             #+#    #+#              #
-#    Updated: 2024/10/10 18:09:01 by lagea            ###   ########.fr        #
+#    Updated: 2024/10/10 18:40:48 by lagea            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,15 +18,18 @@ EXECS = $(SRCS:.c=)
 all: $(EXECS) run_all_tests
 
 strlen: test_ft_strlen
+	make -C ../libft
 	python3 tester.py strlen
 
 isalpha: test_ft_isalpha
+	make -C ../libft
 	python3 tester.py isalpha
 	
 %: %.c
-	$(CC) $(CFLAGS) -o $@ $< ../libft/libft.a  # On suppose que libft.a est déjà compilée
+	$(CC) $(CFLAGS) -o $@ $< ../libft/libft.a
 
 run_all_tests: $(EXECS)
+	make -C ../libft
 	python3 tester.py all
 
 clean:
