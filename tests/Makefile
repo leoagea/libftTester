@@ -6,7 +6,7 @@
 #    By: lagea <lagea@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/10 17:46:27 by lagea             #+#    #+#              #
-#    Updated: 2024/10/10 18:40:48 by lagea            ###   ########.fr        #
+#    Updated: 2024/10/11 17:45:53 by lagea            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,28 +15,42 @@ CFLAGS = -Wall -Wextra -Werror
 SRCS = $(wildcard *.c)
 EXECS = $(SRCS:.c=)
 
-all: $(EXECS) run_all_tests
+BINDIR = bin
 
-strlen: test_ft_strlen
+all: $(BINDIR) $(addprefix $(BINDIR)/, $(EXECS)) run_all_tests
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
+	
+strlen: $(BINDIR)/test_ft_strlen
 	make -C ../libft
 	python3 tester.py strlen
 
-isalpha: test_ft_isalpha
+isalpha: $(BINDIR)/test_ft_isalpha
 	make -C ../libft
 	python3 tester.py isalpha
-	
-%: %.c
+
+isdigit: $(BINDIR)/test_ft_isdigit
+	make -C ../libft
+	python3 tester.py isdigit
+
+memset: $(BINDIR)/test_ft_memset
+	make -C ../libft
+	python3 tester.py memset
+
+$(BINDIR)/%: %.c
 	$(CC) $(CFLAGS) -o $@ $< ../libft/libft.a
 
-run_all_tests: $(EXECS)
+run_all_tests: $(addprefix $(BINDIR)/, $(EXECS))
 	make -C ../libft
 	python3 tester.py all
 
 clean:
-	rm -f $(EXECS)
+	rm -f $(addprefix $(BINDIR)/, $(EXECS))
 
 fclean: clean
-	rm -f *.o
+	rm -f bin/*.o
+	rm -rf bin
 
 re: fclean all
 
